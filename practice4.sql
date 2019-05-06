@@ -1,3 +1,18 @@
 # 找出薪水在公司的平均薪水之上的人员名字
 # 输出标准中包含Employee中所有字段和该employee所在公司名称以及该公司平均薪资：
 # id | name | age | gender | companyId | salary | companyName | avgsal
+select Employee.id,
+       Employee.name,
+       Employee.age,
+       Employee.gender,
+       Employee.companyId,
+       Employee.salary,
+       Company.companyName,
+       avg.avgSalary as avgsal
+from (select avg(Employee.salary) as avgSalary, Employee.companyId
+      from Employee
+      group by Employee.companyId) avg,
+     Employee
+         left join Company on Company.id = Employee.companyId
+where Employee.salary > avg.avgSalary
+  and Employee.companyId = avg.companyId
